@@ -9,16 +9,8 @@ module Main where
 import Miso
 import Miso.String (MisoString, ms)
 
--- | Type synonym for an application model
-type Model = Int
-
--- | Sum type for application events
-data Action
-  = AddOne
-  | SubtractOne
-  | NoOp
-  | SayHelloWorld
-  deriving (Show, Eq)
+import GameModel
+import Rendering
 
 -- | Entry point for a miso application
 main :: IO ()
@@ -46,4 +38,5 @@ viewModel x =
     [ button_ [onClick AddOne] [text "+"]
     , text . ms . show $ x
     , button_ [onClick SubtractOne] [text "-"]
+    , display x
     ]
