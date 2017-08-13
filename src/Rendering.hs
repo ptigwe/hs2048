@@ -3,6 +3,7 @@
 module Rendering where
 
 import GameModel
+import InputModel
 import Miso
 import Miso.String (MisoString, ms)
 import qualified Miso.String as S
@@ -80,7 +81,7 @@ wonOverlayColor = rgba 237 194 46 0.5
 wonMessage :: MisoString
 wonMessage = "You won!"
 
-displayHeading :: Model -> View Action
+displayHeading :: GameState -> View Action
 displayHeading model =
   div_
     [class_ "heading"]
@@ -131,7 +132,7 @@ displayTileContainer =
         [div_ [class_ "tile-inner"] [text "4"]]
     ]
 
-displayGame :: Model -> View Action
+displayGame :: GameState -> View Action
 displayGame model =
   div_
     [class_ "game-container"]
@@ -139,7 +140,7 @@ displayGame model =
 
 link_ = nodeHtml "link"
 
-display :: Model -> View Action
+display :: GameState -> View Action
 display model =
   div_
     [class_ "container"]
@@ -149,6 +150,7 @@ display model =
         , rel_ "stylesheet"
         ]
         []
+    , p_ [] [text . S.pack . show $ model]
     , displayHeading model
     , displayIntro
     , displayGame model

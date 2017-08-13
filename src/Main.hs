@@ -10,6 +10,7 @@ import Miso
 import Miso.String (MisoString, ms)
 
 import GameModel
+import InputModel
 import Logic
 import Rendering
 
@@ -17,16 +18,9 @@ import Rendering
 main :: IO ()
 main = startApp App {..}
   where
-    initialAction = SayHelloWorld -- initial action to be executed on application load
-    model = 0 -- initial model
-    update = updateModel -- update function
+    initialAction = Init -- initial action to be executed on application load
+    model = defaultGame -- initial model
+    update = updateGameState -- update function
     view = display -- view function
     events = defaultEvents -- default delegated events
-    subs = [] -- empty subscription list
-
--- | Updates model, optionally introduces side effects
-updateModel :: Action -> Model -> Effect Action Model
-updateModel AddOne m = noEff (m + 1)
-updateModel SubtractOne m = noEff (m - 1)
-updateModel NoOp m = noEff m
-updateModel SayHelloWorld m = m <# do putStrLn "Hello World" >> pure NoOp
+    subs = [arrowsSub GetArrows] -- empty subscription list

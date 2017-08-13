@@ -5,6 +5,7 @@ module Logic where
 import Data.Maybe
 import GameModel
 import InputModel
+import Miso
 
 groupedByTwo :: Eq a => [a] -> [[a]]
 groupedByTwo [x] = [[x]]
@@ -91,3 +92,12 @@ placeRandomTile float1 float2 gameState@GameState {..} =
          {grid = setTile (fromMaybe (0, 0) tileIndex) grid $ newTile float2}
   where
     tileIndex = newTileIndex float1 grid
+
+newGame :: GameState -> GameState
+newGame = id
+
+updateGameState :: Action -> GameState -> Effect Action GameState
+updateGameState (GetArrows arr) state = noEff nState
+  where
+    nState = state {direction = toDirection arr, count = 1 + count state}
+updateGameState _ state = noEff state

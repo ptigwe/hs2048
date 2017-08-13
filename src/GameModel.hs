@@ -1,6 +1,7 @@
 module GameModel where
 
 import Data.List
+import InputModel
 
 data Tile
   = Number Int
@@ -21,6 +22,8 @@ data GameState = GameState
   { grid :: Grid
   , score :: Int
   , gameProgress :: Progress
+  , direction :: Direction
+  , count :: Int
   } deriving (Show, Eq)
 
 gridSize :: Int
@@ -57,15 +60,11 @@ emptyGrid :: Grid
 emptyGrid = Grid $ replicate gridSize . replicate gridSize $ Empty
 
 defaultGame :: GameState
-defaultGame = GameState {grid = emptyGrid, score = 0, gameProgress = InProgress}
-
--- | Type synonym for an application model
-type Model = Int
-
--- | Sum type for application events
-data Action
-  = AddOne
-  | SubtractOne
-  | NoOp
-  | SayHelloWorld
-  deriving (Show, Eq)
+defaultGame =
+  GameState
+  { grid = emptyGrid
+  , score = 0
+  , gameProgress = InProgress
+  , direction = None
+  , count = 0
+  }
