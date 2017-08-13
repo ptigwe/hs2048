@@ -10,6 +10,7 @@ import Miso
 import Miso.String (MisoString, ms)
 
 import GameModel
+import Logic
 import Rendering
 
 -- | Entry point for a miso application

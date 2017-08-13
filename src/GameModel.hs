@@ -9,17 +9,19 @@ data Tile
 
 newtype Grid =
   Grid [[Tile]]
+  deriving (Show, Eq)
 
 data Progress
   = InProgress
   | GameOver
   | Won
+  deriving (Show, Eq)
 
 data GameState = GameState
   { grid :: Grid
   , score :: Int
   , gameProgress :: Progress
-  }
+  } deriving (Show, Eq)
 
 gridSize :: Int
 gridSize = 4
