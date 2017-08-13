@@ -123,7 +123,13 @@ displayContainer :: View Action
 displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
 
 displayTileContainer :: View Action
-displayTileContainer = div_ [] []
+displayTileContainer =
+  div_
+    [class_ "tile-container"]
+    [ div_
+        [class_ "tile tile-4 tile-position-1-1"]
+        [div_ [class_ "tile-inner"] [text "4"]]
+    ]
 
 displayGame :: Model -> View Action
 displayGame model =
