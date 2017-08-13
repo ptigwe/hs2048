@@ -1,2 +1,2 @@
 all:
-	stack build
+	./build.sh

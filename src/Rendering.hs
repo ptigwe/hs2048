@@ -80,13 +80,67 @@ wonOverlayColor = rgba 237 194 46 0.5
 wonMessage :: MisoString
 wonMessage = "You won!"
 
+displayHeading :: Model -> View Action
+displayHeading model =
+  div_
+    [class_ "heading"]
+    [ h1_ [class_ "title"] [text "2048"]
+    , div_
+        [class_ "scores-container"]
+        [ div_ [class_ "score-container"] [text "0"]
+        , div_ [class_ "best-container"] [text "0"]
+        ]
+    ]
+
+displayIntro :: View Action
+displayIntro =
+  div_
+    [class_ "above-game"]
+    [ p_
+        [class_ "game-intro"]
+        [text "Join the numbers and get to the ", strong_ [] [text "2048 tile"]]
+    , a_ [class_ "restart-button"] [text "New Game"]
+    ]
+
+displayMessage :: View Action
+displayMessage =
+  div_
+    [class_ "game-message"]
+    [ p_ [] []
+    , div_
+        [class_ "lower"]
+        [ a_ [class_ "keep-playing-button"] [text "Keep going"]
+        , a_ [class_ "retry-button"] [text "Try again"]
+        ]
+    ]
+
+gridRow :: View Action
+gridRow = div_ [class_ "grid-row"] (replicate 4 gridCell)
+  where
+    gridCell = div_ [class_ "grid-cell"] []
+
+displayContainer :: View Action
+displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
+
+displayTileContainer :: View Action
+displayTileContainer = div_ [] []
+
+displayGame :: Model -> View Action
+displayGame model =
+  div_
+    [class_ "game-container"]
+    [displayMessage, displayContainer, displayTileContainer]
+
+link_ = nodeHtml "link"
+
 display :: Model -> View Action
 display model =
   div_
     [class_ "container"]
-    [ script_
-        [ src_ "http://gabrielecirulli.github.io/2048/style/main.css"
+    [ link_
+        [ href_ "http://gabrielecirulli.github.io/2048/style/main.css"
         , type_ "text/css"
+        , rel_ "stylesheet"
         ]
         []
     , displayHeading model
