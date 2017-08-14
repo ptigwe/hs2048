@@ -8,6 +8,7 @@ module Main where
 -- | Miso framework import
 import Miso
 import Miso.String (MisoString, ms)
+import System.Random
 
 import GameModel
 import InputModel
@@ -16,7 +17,10 @@ import Rendering
 
 -- | Entry point for a miso application
 main :: IO ()
-main = startApp App {..}
+main = do
+  stdGen <- getStdGen
+  let (seed, _) = random stdGen
+  startApp App {model = defaultGame {randomSeed = seed}, ..}
   where
     initialAction = Init -- initial action to be executed on application load
     model = defaultGame -- initial model

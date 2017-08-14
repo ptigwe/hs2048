@@ -7,6 +7,7 @@ import Data.Maybe
 import GameModel
 import InputModel
 import Miso
+import System.Random
 
 groupedByTwo :: Eq a => [a] -> [[a]]
 groupedByTwo [x] = [[x]]
@@ -97,28 +98,29 @@ newTileIndex x g =
     emptyTileIndices = emptyTiles g
     idx = (floor . (* x) . fromIntegral . length $ emptyTileIndices) :: Int
 
-placeRandomTile :: Float -> Float -> GameState -> GameState
-placeRandomTile float1 float2 gameState@GameState {..} =
+placeRandomTile :: GameState -> GameState
+placeRandomTile gameState@GameState {..} =
   if isNothing tileIndex
     then gameState
     else gameState
-         {grid = setTile (fromMaybe (0, 0) tileIndex) grid $ newTile float2}
+         { grid = setTile (fromMaybe (0, 0) tileIndex) grid $ newTile float2
+         , randomSeed = nSeed
+         }
   where
+    (float1, stdGen1) = random . mkStdGen $ randomSeed
+    (float2, stdGen2) = random stdGen1
+    (nSeed, _) = random stdGen2
     tileIndex = newTileIndex float1 grid
 
 newGame :: GameState -> GameState
-newGame state@GameState {..} =
-  placeRandomTile (randomFloats !! 0) (randomFloats !! 1) .
-  placeRandomTile (randomFloats !! 2) (randomFloats !! 3) $
-  state
+newGame = placeRandomTile . placeRandomTile
 
 stepSlide :: GameState -> GameState
 stepSlide state =
   if (grid pushedState) == (grid state)
     then state
-    else placeRandomTile (randFloats !! 0) (randFloats !! 0) pushedState
+    else placeRandomTile pushedState
   where
-    randFloats = randomFloats state
     pushedState = slideGameState state {drawGrid = emptyGrid}
 
 step :: GameState -> GameState
