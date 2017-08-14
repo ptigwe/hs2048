@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module Logic where
@@ -65,6 +66,9 @@ gameLost g = (g /= emptyGrid) && all (== g) [up, down, left, right]
     left = fst . slideGrid L $ g
     right = fst . slideGrid R $ g
 
+gameWon :: Grid -> Bool
+gameWon (Grid g) = Number 2048 `elem` concat g
+
 lose :: GameState -> GameState
 lose gameState = gameState {gameProgress = GameOver}
 
@@ -108,15 +112,26 @@ newGame state@GameState {..} =
   placeRandomTile (randomFloats !! 2) (randomFloats !! 3) $
   state
 
+stepSlide :: GameState -> GameState
+stepSlide state =
+  if (grid pushedState) == (grid state)
+    then state
+    else placeRandomTile (randFloats !! 0) (randFloats !! 0) pushedState
+  where
+    randFloats = randomFloats state
+    pushedState = slideGameState state {drawGrid = emptyGrid}
+
 step :: GameState -> GameState
 step state@GameState {..} =
-  if direction == None
-    then state
-    else slideGameState state {drawGrid = emptyGrid}
+  if | gameProgress /= InProgress -> state
+     | gameWon grid -> win state
+     | gameLost grid -> lose state
+     | direction /= None -> stepSlide state
+     | otherwise -> state
 
 updateGameState :: Action -> GameState -> Effect Action GameState
 updateGameState Sync state@GameState {..} = noEff state {drawGrid = grid}
-updateGameState NewGame state = (newGame state) <# pure Sync
+updateGameState NewGame state = newGame state <# pure Sync
 updateGameState (GetArrows arr) state = step nState <# pure Sync
   where
     nState = state {direction = toDirection arr, count = 1 + count state}

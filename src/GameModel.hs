@@ -6,11 +6,18 @@ import InputModel
 data Tile
   = Number Int
   | Empty
-  deriving (Show, Eq)
+  deriving (Eq)
+
+instance Show Tile where
+  show (Number n) = show n
+  show Empty = "-"
 
 newtype Grid =
   Grid [[Tile]]
-  deriving (Show, Eq)
+  deriving (Eq)
+
+instance Show Grid where
+  show (Grid x) = unlines . map show $ x
 
 data Progress
   = InProgress
