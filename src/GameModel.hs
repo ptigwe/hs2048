@@ -20,6 +20,7 @@ data Progress
 
 data GameState = GameState
   { grid :: Grid
+  , drawGrid :: Grid
   , score :: Int
   , gameProgress :: Progress
   , direction :: Direction
@@ -64,6 +65,7 @@ defaultGame :: GameState
 defaultGame =
   GameState
   { grid = emptyGrid
+  , drawGrid = emptyGrid
   , score = 0
   , gameProgress = InProgress
   , direction = None

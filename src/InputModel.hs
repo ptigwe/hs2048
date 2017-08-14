@@ -16,6 +16,7 @@ data Action
   = Init
   | NewGame
   | GetArrows Arrows
+  | Sync
   | NoOp
 
 toDirection :: Arrows -> Direction

@@ -112,14 +112,12 @@ step :: GameState -> GameState
 step state@GameState {..} =
   if direction == None
     then state
-    else slideGameState state
+    else slideGameState state {drawGrid = emptyGrid}
 
 updateGameState :: Action -> GameState -> Effect Action GameState
-updateGameState NewGame state =
-  (newGame state) <# do
-    putStrLn "New Game"
-    pure NoOp
-updateGameState (GetArrows arr) state = noEff $ step nState
+updateGameState Sync state@GameState {..} = noEff state {drawGrid = grid}
+updateGameState NewGame state = (newGame state) <# pure Sync
+updateGameState (GetArrows arr) state = step nState <# pure Sync
   where
     nState = state {direction = toDirection arr, count = 1 + count state}
 updateGameState _ state = noEff state
