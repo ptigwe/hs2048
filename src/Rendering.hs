@@ -127,7 +127,7 @@ displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
 displayTile :: (Tile, Int, Int) -> View Action
 displayTile (Number t, col, row) =
   div_
-    [class_ . S.pack . unwords $ ["tile", valueClass, posClass]]
+    [class_ . S.pack . unwords $ ["tile", valueClass, posClass, "tile-new"]]
     [div_ [class_ "tile-inner"] [text . ms $ val]]
   where
     val = show t

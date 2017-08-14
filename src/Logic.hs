@@ -17,6 +17,7 @@ groupedByTwo (x:y:xs) =
   if x == y
     then [x, y] : groupedByTwo xs
     else [x] : groupedByTwo (y : xs)
+groupedByTwo [] = []
 
 slideRow :: [Tile] -> ([Tile], Int)
 slideRow r =
@@ -47,6 +48,14 @@ slideGrid dir grid = (newGrid, scoreGained)
     slidRotatedGrid = Grid (map fst rowsWithScores)
     scoreGained = sum . map snd $ rowsWithScores
     newGrid = slidGrid dir slidRotatedGrid
+
+slideGameState :: GameState -> GameState
+slideGameState state@GameState {..} =
+  if newGrid == grid
+    then state
+    else state {grid = newGrid, score = score + newScore}
+  where
+    (newGrid, newScore) = slideGrid direction grid
 
 gameLost :: Grid -> Bool
 gameLost g = (g /= emptyGrid) && all (== g) [up, down, left, right]
@@ -99,9 +108,18 @@ newGame state@GameState {..} =
   placeRandomTile (randomFloats !! 2) (randomFloats !! 3) $
   state
 
+step :: GameState -> GameState
+step state@GameState {..} =
+  if direction == None
+    then state
+    else slideGameState state
+
 updateGameState :: Action -> GameState -> Effect Action GameState
-updateGameState NewGame state = noEff (newGame state)
-updateGameState (GetArrows arr) state = noEff nState
+updateGameState NewGame state =
+  (newGame state) <# do
+    putStrLn "New Game"
+    pure NoOp
+updateGameState (GetArrows arr) state = noEff $ step nState
   where
     nState = state {direction = toDirection arr, count = 1 + count state}
 updateGameState _ state = noEff state
