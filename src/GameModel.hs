@@ -24,6 +24,7 @@ data GameState = GameState
   , gameProgress :: Progress
   , direction :: Direction
   , count :: Int
+  , randomFloats :: [Float]
   } deriving (Show, Eq)
 
 gridSize :: Int
@@ -67,4 +68,5 @@ defaultGame =
   , gameProgress = InProgress
   , direction = None
   , count = 0
+  , randomFloats = [0.1, 0.3, 0.5, 0.7] :: [Float]
   }

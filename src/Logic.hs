@@ -94,9 +94,13 @@ placeRandomTile float1 float2 gameState@GameState {..} =
     tileIndex = newTileIndex float1 grid
 
 newGame :: GameState -> GameState
-newGame = id
+newGame state@GameState {..} =
+  placeRandomTile (randomFloats !! 0) (randomFloats !! 1) .
+  placeRandomTile (randomFloats !! 2) (randomFloats !! 3) $
+  state
 
 updateGameState :: Action -> GameState -> Effect Action GameState
+updateGameState NewGame state = noEff (newGame state)
 updateGameState (GetArrows arr) state = noEff nState
   where
     nState = state {direction = toDirection arr, count = 1 + count state}

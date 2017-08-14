@@ -101,7 +101,7 @@ displayIntro =
     [ p_
         [class_ "game-intro"]
         [text "Join the numbers and get to the ", strong_ [] [text "2048 tile"]]
-    , a_ [class_ "restart-button"] [text "New Game"]
+    , a_ [class_ "restart-button", onClick NewGame] [text "New Game"]
     ]
 
 displayMessage :: View Action
@@ -124,20 +124,32 @@ gridRow = div_ [class_ "grid-row"] (replicate 4 gridCell)
 displayContainer :: View Action
 displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
 
-displayTileContainer :: View Action
-displayTileContainer =
+displayTile :: (Tile, Int, Int) -> View Action
+displayTile (Number t, col, row) =
+  div_
+    [class_ . S.pack . unwords $ ["tile", valueClass, posClass]]
+    [div_ [class_ "tile-inner"] [text . ms $ val]]
+  where
+    val = show t
+    valueClass = "tile-" ++ val
+    posClass = "tile-position-" ++ show (col + 1) ++ "-" ++ show (row + 1)
+
+displayGrid :: Grid -> [View Action]
+displayGrid =
+  map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates
+
+displayTileContainer :: Grid -> View Action
+displayTileContainer grid =
   div_
     [class_ "tile-container"]
-    [ div_
-        [class_ "tile tile-4 tile-position-1-1"]
-        [div_ [class_ "tile-inner"] [text "4"]]
-    ]
+    (map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates $
+     grid)
 
 displayGame :: GameState -> View Action
 displayGame model =
   div_
     [class_ "game-container"]
-    [displayMessage, displayContainer, displayTileContainer]
+    [displayMessage, displayContainer, displayTileContainer . grid $ model]
 
 link_ = nodeHtml "link"
 
