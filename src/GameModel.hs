@@ -31,7 +31,6 @@ data GameState = GameState
   , score :: Int
   , gameProgress :: Progress
   , direction :: Direction
-  , count :: Int
   , randomSeed :: Int
   } deriving (Show, Eq)
 
@@ -76,6 +75,5 @@ defaultGame =
   , score = 0
   , gameProgress = InProgress
   , direction = None
-  , count = 0
   , randomSeed = 0
   }

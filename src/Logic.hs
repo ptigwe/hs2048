@@ -113,7 +113,9 @@ placeRandomTile gameState@GameState {..} =
     tileIndex = newTileIndex float1 grid
 
 newGame :: GameState -> GameState
-newGame = placeRandomTile . placeRandomTile
+newGame state@GameState {..} = newGame {randomSeed = randomSeed}
+  where
+    newGame = placeRandomTile . placeRandomTile $ defaultGame
 
 stepSlide :: GameState -> GameState
 stepSlide state =
@@ -136,5 +138,5 @@ updateGameState Sync state@GameState {..} = noEff state {drawGrid = grid}
 updateGameState NewGame state = newGame state <# pure Sync
 updateGameState (GetArrows arr) state = step nState <# pure Sync
   where
-    nState = state {direction = toDirection arr, count = 1 + count state}
+    nState = state {direction = toDirection arr}
 updateGameState _ state = noEff state
