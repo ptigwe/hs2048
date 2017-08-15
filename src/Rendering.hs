@@ -152,8 +152,6 @@ displayGame model =
     [class_ "game-container"]
     [displayMessage, displayContainer, displayTileContainer . drawGrid $ model]
 
-link_ = nodeHtml "link"
-
 display :: GameState -> View Action
 display model =
   div_
