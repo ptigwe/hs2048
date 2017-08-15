@@ -55,9 +55,11 @@ slideGameState :: GameState -> GameState
 slideGameState state@GameState {..} =
   if newGrid == grid
     then state
-    else state {grid = newGrid, score = score + newScore}
+    else state
+         {grid = newGrid, score = newScore, bestScore = max bestScore newScore}
   where
-    (newGrid, newScore) = slideGrid direction grid
+    (newGrid, gotScore) = slideGrid direction grid
+    newScore = score + gotScore
 
 gameLost :: Grid -> Bool
 gameLost g = (g /= emptyGrid) && all (== g) [up, down, left, right]
@@ -113,7 +115,8 @@ placeRandomTile gameState@GameState {..} =
     tileIndex = newTileIndex float1 grid
 
 newGame :: GameState -> GameState
-newGame state@GameState {..} = newGame {randomSeed = randomSeed}
+newGame state@GameState {..} =
+  newGame {randomSeed = randomSeed, bestScore = bestScore}
   where
     newGame = placeRandomTile . placeRandomTile $ defaultGame
 

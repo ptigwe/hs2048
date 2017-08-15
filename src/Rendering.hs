@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Rendering where
@@ -83,14 +84,14 @@ wonMessage :: MisoString
 wonMessage = "You won!"
 
 displayHeading :: GameState -> View Action
-displayHeading model =
+displayHeading model@GameState {..} =
   div_
     [class_ "heading"]
     [ h1_ [class_ "title"] [text "2048"]
     , div_
         [class_ "scores-container"]
-        [ div_ [class_ "score-container"] [text "0"]
-        , div_ [class_ "best-container"] [text "0"]
+        [ div_ [class_ "score-container"] [text . ms . show $ score]
+        , div_ [class_ "best-container"] [text . ms . show $ bestScore]
         ]
     ]
 
