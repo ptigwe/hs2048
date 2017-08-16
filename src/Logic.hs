@@ -56,10 +56,15 @@ slideGameState state@GameState {..} =
   if newGrid == grid
     then state
     else state
-         {grid = newGrid, score = newScore, bestScore = max bestScore newScore}
+         { grid = newGrid
+         , score = newScore
+         , bestScore = max bestScore newScore
+         , scoreAdd = gotScore
+         }
   where
     (newGrid, gotScore) = slideGrid direction grid
     newScore = score + gotScore
+    newBest = max bestScore newScore
 
 gameLost :: Grid -> Bool
 gameLost g = (g /= emptyGrid) && all (== g) [up, down, left, right]
@@ -126,7 +131,7 @@ stepSlide state =
     then state
     else placeRandomTile pushedState
   where
-    pushedState = slideGameState state {drawGrid = emptyGrid}
+    pushedState = slideGameState state {drawGrid = emptyGrid, drawScoreAdd = 0}
 
 step :: GameState -> GameState
 step state@GameState {..} =
@@ -137,7 +142,8 @@ step state@GameState {..} =
      | otherwise -> state
 
 updateGameState :: Action -> GameState -> Effect Action GameState
-updateGameState Sync state@GameState {..} = noEff state {drawGrid = grid}
+updateGameState Sync state@GameState {..} =
+  noEff state {drawGrid = grid, drawScoreAdd = scoreAdd}
 updateGameState NewGame state = newGame state <# pure Sync
 updateGameState (GetArrows arr) state = step nState <# pure Sync
   where

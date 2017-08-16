@@ -29,6 +29,8 @@ data GameState = GameState
   { grid :: Grid
   , drawGrid :: Grid
   , score :: Int
+  , scoreAdd :: Int
+  , drawScoreAdd :: Int
   , bestScore :: Int
   , gameProgress :: Progress
   , direction :: Direction
@@ -74,6 +76,8 @@ defaultGame =
   { grid = emptyGrid
   , drawGrid = emptyGrid
   , score = 0
+  , scoreAdd = 0
+  , drawScoreAdd = 0
   , bestScore = 0
   , gameProgress = InProgress
   , direction = None

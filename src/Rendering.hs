@@ -90,10 +90,21 @@ displayHeading model@GameState {..} =
     [ h1_ [class_ "title"] [text "2048"]
     , div_
         [class_ "scores-container"]
-        [ div_ [class_ "score-container"] [text . ms . show $ score]
+        [ div_
+            [class_ "score-container"]
+            ((text . ms . show $ score) : scoreAddDiv)
         , div_ [class_ "best-container"] [text . ms . show $ bestScore]
         ]
     ]
+  where
+    scoreAddDiv =
+      case drawScoreAdd of
+        0 -> []
+        _ ->
+          [ div_
+              [class_ "score-addition"]
+              [text . ms $ "+" ++ show drawScoreAdd]
+          ]
 
 displayIntro :: View Action
 displayIntro =
