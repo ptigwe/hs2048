@@ -302,7 +302,7 @@ hr {
         @for $xp from 1 through $grid-row-cells{
           &.tile-position-#{$x}-#{$y}-#{$xp}-#{$y} {
             @include transform(translate($xPos, $yPos));
-            @include animation(2s, 5s, anim#{$x}#{$y}#{$xp}#{$y});
+            @include animation(anim#{$x}#{$y}#{$xp}#{$y} 200ms ease 0ms);
           }
           @include keyframes(anim#{$x}#{$y}#{$xp}#{$y}){
             0% {
@@ -314,7 +314,7 @@ hr {
         @for $yp from 1 through $grid-row-cells{
           &.tile-position-#{$x}-#{$y}-#{$x}-#{$yp} {
             @include transform(translate($xPos, $yPos));
-            @include animation(2s, 5s, anim#{$x}#{$y}#{$x}#{$yp});
+            @include animation(anim#{$x}#{$y}#{$x}#{$yp} 200ms ease 0ms);
           }
           @include keyframes(anim#{$x}#{$y}#{$x}#{$yp}){
             0% {
