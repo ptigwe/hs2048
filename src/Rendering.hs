@@ -133,7 +133,10 @@ displayTile (Number t, col, row) =
   where
     val = show t
     valueClass = "tile-" ++ val
-    posClass = "tile-position-" ++ show (col + 1) ++ "-" ++ show (row + 1)
+    posClass =
+      "tile-position-" ++
+      show (col + 1) ++
+      "-" ++ show (row + 1) ++ "-" ++ show (col + 1) ++ "-" ++ show (row + 1)
 
 displayGrid :: Grid -> [View Action]
 displayGrid =
@@ -156,13 +159,7 @@ display :: GameState -> View Action
 display model =
   div_
     [class_ "container"]
-    [ link_
-        [ href_ "http://gabrielecirulli.github.io/2048/style/main.css"
-        , type_ "text/css"
-        , rel_ "stylesheet"
-        ]
-        []
-    , div_
+    [ div_
         [ style_ . M.fromList $
           [("left", "100px"), ("width", "100px"), ("position", "absolute")]
         ]

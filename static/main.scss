@@ -297,10 +297,31 @@ hr {
     // Build position classes
     @for $x from 1 through $grid-row-cells {
       @for $y from 1 through $grid-row-cells {
-        &.tile-position-#{$x}-#{$y} {
-          $xPos: floor(($tile-size + $grid-spacing) * ($x - 1));
-          $yPos: floor(($tile-size + $grid-spacing) * ($y - 1));
-          @include transform(translate($xPos, $yPos));
+        $xPos: floor(($tile-size + $grid-spacing) * ($x - 1));
+        $yPos: floor(($tile-size + $grid-spacing) * ($y - 1));
+        @for $xp from 1 through $grid-row-cells{
+          &.tile-position-#{$x}-#{$y}-#{$xp}-#{$y} {
+            @include transform(translate($xPos, $yPos));
+            @include animation(2s, 5s, anim#{$x}#{$y}#{$xp}#{$y});
+          }
+          @include keyframes(anim#{$x}#{$y}#{$xp}#{$y}){
+            0% {
+              $xpPos: floor(($tile-size + $grid-spacing) * ($xp - 1));
+              @include transform(translate($xpPos, $yPos));
+            }
+          }
+        }
+        @for $yp from 1 through $grid-row-cells{
+          &.tile-position-#{$x}-#{$y}-#{$x}-#{$yp} {
+            @include transform(translate($xPos, $yPos));
+            @include animation(2s, 5s, anim#{$x}#{$y}#{$x}#{$yp});
+          }
+          @include keyframes(anim#{$x}#{$y}#{$x}#{$yp}){
+            0% {
+              $ypPos: floor(($tile-size + $grid-spacing) * ($yp - 1));
+              @include transform(translate($xPos, $ypPos));
+            }
+          }
         }
       }
     }
