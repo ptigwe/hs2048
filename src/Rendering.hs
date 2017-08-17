@@ -192,12 +192,11 @@ display :: GameState -> View Action
 display model =
   div_
     [class_ "container"]
-    [ div_
+    [displayHeading model, displayIntro, displayGame model]
+  where
+    preview =
+      div_
         [ style_ . M.fromList $
           [("left", "100px"), ("width", "100px"), ("position", "absolute")]
         ]
         [text . S.pack . show $ model]
-    , displayHeading model
-    , displayIntro
-    , displayGame model
-    ]
