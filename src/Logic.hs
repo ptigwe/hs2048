@@ -21,11 +21,15 @@ groupedByTwo (x:y:xs) =
     else [x] : groupedByTwo (y : xs)
 groupedByTwo [] = []
 
+mergeTiles :: [Tile] -> Tile
+mergeTiles [x] = x
+mergeTiles [x, y] = Tile s (-1, -1) [x, y]
+  where
+    s = tileValue x + tileValue y
+
 slideRow :: [Tile] -> ([Tile], Int)
 slideRow r =
-  ( take
-      gridSize
-      (map (intToTile . sum . map tileToInt) grouped ++ replicate gridSize Empty)
+  ( take gridSize (map mergeTiles grouped ++ replicate gridSize Empty)
   , sum . map tileToInt . concat . filter (\x -> length x > 1) $ grouped)
   where
     grouped = groupedByTwo . filter (/= Empty) $ r
@@ -46,7 +50,8 @@ slideGrid :: Direction -> Grid -> (Grid, Int)
 slideGrid None grid = (grid, 0)
 slideGrid dir grid = (newGrid, scoreGained)
   where
-    rowsWithScores = map slideRow . (\(Grid h) -> h) . rotatedGrid dir $ grid
+    posGrid = updatePosition grid
+    rowsWithScores = map slideRow . (\(Grid h) -> h) . rotatedGrid dir $ posGrid
     slidRotatedGrid = Grid (map fst rowsWithScores)
     scoreGained = sum . map snd $ rowsWithScores
     newGrid = slidGrid dir slidRotatedGrid

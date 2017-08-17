@@ -136,18 +136,33 @@ gridRow = div_ [class_ "grid-row"] (replicate 4 gridCell)
 displayContainer :: View Action
 displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
 
+previousPos :: Tile -> (Int, Int) -> (Int, Int)
+previousPos (Number _) = id
+previousPos (Tile n pos _) =
+  case pos of
+    (-1, -1) -> id
+    _ -> const pos
+previousPos Empty = id
+
 displayTile :: (Tile, Int, Int) -> View Action
-displayTile (Number t, col, row) =
+displayTile (tile, col, row) =
   div_
     [class_ . S.pack . unwords $ ["tile", valueClass, posClass]]
     [div_ [class_ "tile-inner"] [text . ms $ val]]
   where
-    val = show t
+    val =
+      show
+        (case tile of
+           Number n -> n
+           Tile n _ _ -> n
+           Empty -> 0)
     valueClass = "tile-" ++ val
+    (prevCol, prevRow) = previousPos tile (col, row)
     posClass =
       "tile-position-" ++
       show (col + 1) ++
-      "-" ++ show (row + 1) ++ "-" ++ show (col + 1) ++ "-" ++ show (row + 1)
+      "-" ++
+      show (row + 1) ++ "-" ++ show (prevCol + 1) ++ "-" ++ show (prevRow + 1)
 
 displayGrid :: Grid -> [View Action]
 displayGrid =
