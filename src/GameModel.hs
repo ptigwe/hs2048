@@ -78,12 +78,16 @@ updateTilePosition (Number n) pos = Tile n pos []
 updateTilePosition (Tile n _ t) pos = Tile n pos t
 updateTilePosition Empty _ = Empty
 
+removeMerges :: Tile -> Tile
+removeMerges (Tile n pos _) = Tile n pos []
+removeMerges x = x
+
 updatePosition :: Grid -> Grid
 updatePosition (Grid g) =
   Grid $
   map (map (uncurry updateTilePosition)) .
   zipWith (\j r -> map (\(t, i) -> (t, (i, j))) r) [0 .. (gridSize - 1)] .
-  map (\r -> zip r [0 .. (gridSize - 1)]) $
+  map ((\r -> zip r [0 .. (gridSize - 1)]) . map removeMerges) $
   g
 
 tilesWithCoordinates :: Grid -> [(Tile, Int, Int)]

@@ -145,11 +145,13 @@ previousPos (Tile n pos _) =
     _ -> const pos
 previousPos Empty = id
 
-displayTile :: (Tile, Int, Int) -> View Action
+displayTile :: (Tile, Int, Int) -> [View Action]
 displayTile (tile, col, row) =
-  div_
-    [class_ . S.pack . unwords $ ["tile", valueClass, posClass, statusClass]]
-    [div_ [class_ "tile-inner"] [text . ms $ val]]
+  merges ++
+  [ div_
+      [class_ . S.pack . unwords $ ["tile", valueClass, posClass, statusClass]]
+      [div_ [class_ "tile-inner"] [text . ms $ val]]
+  ]
   where
     val = show . tileValue $ tile
     valueClass = "tile-" ++ val
@@ -167,16 +169,21 @@ displayTile (tile, col, row) =
              | pos == (-1, -1) -> "tile-merged"
              | otherwise -> ""
         _ -> ""
+    merges =
+      case tile of
+        (Number _) -> []
+        (Tile _ _ x) -> concatMap (displayTile . (\t -> (t, col, row))) x
 
-displayGrid :: Grid -> [View Action]
-displayGrid =
-  map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates
-
+--displayGrid :: Grid -> [View Action]
+--displayGrid =
+--  map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates
+--
 displayTileContainer :: Grid -> View Action
 displayTileContainer grid =
   div_
     [class_ "tile-container"]
-    (map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates $
+    (concatMap displayTile .
+     filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates $
      grid)
 
 displayGame :: GameState -> View Action
