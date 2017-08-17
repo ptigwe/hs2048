@@ -174,10 +174,6 @@ displayTile (tile, col, row) =
         (Number _) -> []
         (Tile _ _ x) -> concatMap (displayTile . (\t -> (t, col, row))) x
 
---displayGrid :: Grid -> [View Action]
---displayGrid =
---  map displayTile . filter (\(t, _, _) -> t /= Empty) . tilesWithCoordinates
---
 displayTileContainer :: Grid -> View Action
 displayTileContainer grid =
   div_
