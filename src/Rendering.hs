@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -147,15 +148,10 @@ previousPos Empty = id
 displayTile :: (Tile, Int, Int) -> View Action
 displayTile (tile, col, row) =
   div_
-    [class_ . S.pack . unwords $ ["tile", valueClass, posClass]]
+    [class_ . S.pack . unwords $ ["tile", valueClass, posClass, statusClass]]
     [div_ [class_ "tile-inner"] [text . ms $ val]]
   where
-    val =
-      show
-        (case tile of
-           Number n -> n
-           Tile n _ _ -> n
-           Empty -> 0)
+    val = show . tileValue $ tile
     valueClass = "tile-" ++ val
     (prevCol, prevRow) = previousPos tile (col, row)
     posClass =
@@ -163,6 +159,14 @@ displayTile (tile, col, row) =
       show (col + 1) ++
       "-" ++
       show (row + 1) ++ "-" ++ show (prevCol + 1) ++ "-" ++ show (prevRow + 1)
+    statusClass =
+      case tile of
+        (Number _) -> "tile-new"
+        (Tile _ pos x) ->
+          if | null x -> ""
+             | pos == (-1, -1) -> "tile-merged"
+             | otherwise -> ""
+        _ -> ""
 
 displayGrid :: Grid -> [View Action]
 displayGrid =

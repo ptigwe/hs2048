@@ -132,7 +132,7 @@ newGame state@GameState {..} =
 
 stepSlide :: GameState -> GameState
 stepSlide state =
-  if (grid pushedState) == (grid state)
+  if grid pushedState == grid state
     then state
     else placeRandomTile pushedState
   where
