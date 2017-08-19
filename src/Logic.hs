@@ -137,7 +137,7 @@ stepSlide state =
     then state
     else placeRandomTile pushedState
   where
-    pushedState = slideGameState state {drawGrid = emptyGrid, drawScoreAdd = 0}
+    pushedState = slideGameState state {drawScoreAdd = 0}
 
 step :: GameState -> GameState
 step state@GameState {..} =
@@ -149,7 +149,7 @@ step state@GameState {..} =
 
 updateGameState :: Action -> GameState -> Effect Action GameState
 updateGameState Sync state@GameState {..} =
-  noEff state {drawGrid = grid, drawScoreAdd = scoreAdd}
+  noEff state {drawScoreAdd = scoreAdd}
 updateGameState NewGame state = newGame state <# pure Sync
 updateGameState (GetArrows arr) state = step nState <# pure Sync
   where

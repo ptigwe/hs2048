@@ -186,7 +186,7 @@ displayGame :: GameState -> View Action
 displayGame model =
   div_
     [class_ "game-container"]
-    [displayMessage, displayContainer, displayTileContainer . drawGrid $ model]
+    [displayMessage, displayContainer, displayTileContainer . grid $ model]
 
 display :: GameState -> View Action
 display model =

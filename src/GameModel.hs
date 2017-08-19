@@ -38,7 +38,6 @@ data Progress
 
 data GameState = GameState
   { grid :: Grid
-  , drawGrid :: Grid
   , score :: Int
   , scoreAdd :: Int
   , drawScoreAdd :: Int
@@ -107,7 +106,6 @@ defaultGame :: GameState
 defaultGame =
   GameState
   { grid = emptyGrid
-  , drawGrid = emptyGrid
   , score = 0
   , scoreAdd = 0
   , drawScoreAdd = 0
