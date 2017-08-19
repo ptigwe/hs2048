@@ -16,6 +16,7 @@ data Action
   = Init
   | NewGame
   | GetArrows Arrows
+  | Continue
   | Sync
   | NoOp
 

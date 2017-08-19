@@ -141,7 +141,7 @@ stepSlide state =
 
 step :: GameState -> GameState
 step state@GameState {..} =
-  if | gameProgress /= InProgress -> state
+  if | gameProgress == Won || gameProgress == GameOver -> state
      | gameWon grid -> win state
      | gameLost grid -> lose state
      | direction /= None -> stepSlide state
@@ -151,6 +151,7 @@ updateGameState :: Action -> GameState -> Effect Action GameState
 updateGameState Sync state@GameState {..} =
   noEff state {drawScoreAdd = scoreAdd}
 updateGameState NewGame state = newGame state <# pure Sync
+updateGameState Continue state = noEff state {gameProgress = Continuing}
 updateGameState (GetArrows arr) state = step nState <# pure Sync
   where
     nState = state {direction = toDirection arr}

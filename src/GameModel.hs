@@ -32,6 +32,7 @@ instance Show Grid where
 
 data Progress
   = InProgress
+  | Continuing
   | GameOver
   | Won
   deriving (Show, Eq)

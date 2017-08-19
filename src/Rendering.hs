@@ -117,17 +117,25 @@ displayIntro =
     , a_ [class_ "restart-button", onClick NewGame] [text "New Game"]
     ]
 
-displayMessage :: View Action
-displayMessage =
+displayMessage :: GameState -> View Action
+displayMessage state@GameState {..} =
   div_
-    [class_ "game-message"]
-    [ p_ [] []
+    [class_ . S.pack $ "game-message" ++ msgClass]
+    [ p_ [] [msg]
     , div_
         [class_ "lower"]
-        [ a_ [class_ "keep-playing-button"] [text "Keep going"]
-        , a_ [class_ "retry-button"] [text "Try again"]
+        [ a_
+            [class_ "keep-playing-button", onClick Continue]
+            [text "Keep going"]
+        , a_ [class_ "retry-button", onClick NewGame] [text "Try again"]
         ]
     ]
+  where
+    (msg, msgClass) =
+      case gameProgress of
+        GameOver -> ("Game Over!", " game-over")
+        Won -> ("Game Won!", " game-won")
+        _ -> ("", "")
 
 gridRow :: View Action
 gridRow = div_ [class_ "grid-row"] (replicate 4 gridCell)
@@ -186,7 +194,10 @@ displayGame :: GameState -> View Action
 displayGame model =
   div_
     [class_ "game-container"]
-    [displayMessage, displayContainer, displayTileContainer . grid $ model]
+    [ displayMessage model
+    , displayContainer
+    , displayTileContainer . grid $ model
+    ]
 
 display :: GameState -> View Action
 display model =
