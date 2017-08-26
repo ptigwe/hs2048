@@ -4,6 +4,8 @@ synopsis:            An implementation of 2048 using Haskell and Miso
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
+license:             BSD3
+license-file:        LICENSE
 
 executable app
   hs-source-dirs:      src
