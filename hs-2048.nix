@@ -11,5 +11,5 @@ mkDerivation {
     aeson aeson-pretty base containers miso random
   ];
   description = "An implementation of 2048 using Haskell and Miso";
-  license = stdenv.lib.licenses.unfree;
+  license = stdenv.lib.licenses.bsd3;
 }
