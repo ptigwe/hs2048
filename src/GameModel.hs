@@ -46,6 +46,7 @@ data GameState = GameState
   , gameProgress :: Progress
   , direction :: Direction
   , randomSeed :: Int
+  , status :: Int
   } deriving (Show, Eq)
 
 gridSize :: Int
@@ -114,4 +115,5 @@ defaultGame =
   , gameProgress = InProgress
   , direction = None
   , randomSeed = 0
+  , status = 0
   }

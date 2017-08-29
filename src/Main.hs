@@ -5,6 +5,7 @@
 -- | Haskell module declaration
 module Main where
 
+import Data.Map
 -- | Miso framework import
 import Miso
 import Miso.String (MisoString, ms)
@@ -14,6 +15,7 @@ import GameModel
 import InputModel
 import Logic
 import Rendering
+import Touch
 
 -- | Entry point for a miso application
 main :: IO ()
@@ -26,5 +28,5 @@ main = do
     model = defaultGame -- initial model
     update = updateGameState -- update function
     view = display -- view function
-    events = defaultEvents -- default delegated events
+    events = union touchEvents defaultEvents -- default delegated events
     subs = [arrowsSub GetArrows] -- empty subscription list

@@ -10,6 +10,7 @@ import InputModel
 import Miso
 import Miso.String (MisoString, ms)
 import qualified Miso.String as S
+import Touch
 
 black :: MisoString
 black = "rgb(0,0,0)"
@@ -143,7 +144,10 @@ gridRow = div_ [class_ "grid-row"] (replicate 4 gridCell)
     gridCell = div_ [class_ "grid-cell"] []
 
 displayContainer :: View Action
-displayContainer = div_ [class_ "grid-container"] (replicate 4 gridRow)
+displayContainer =
+  div_
+    [class_ "grid-container", onTouchStart TouchStart, onTouchEnd TouchEnd]
+    (replicate 4 gridRow)
 
 previousPos :: Tile -> (Int, Int) -> (Int, Int)
 previousPos (Number _) = id
@@ -203,7 +207,7 @@ display :: GameState -> View Action
 display model =
   div_
     [class_ "container"]
-    [displayHeading model, displayIntro, displayGame model]
+    [preview, displayHeading model, displayIntro, displayGame model]
   where
     preview =
       div_
