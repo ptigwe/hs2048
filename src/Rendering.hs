@@ -207,7 +207,7 @@ display :: GameState -> View Action
 display model =
   div_
     [class_ "container"]
-    [preview, displayHeading model, displayIntro, displayGame model]
+    [displayHeading model, displayIntro, displayGame model]
   where
     preview =
       div_

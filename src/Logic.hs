@@ -163,6 +163,9 @@ updateGameState (TouchStart (TouchEvent touch)) state =
 updateGameState (TouchEnd (TouchEvent touch)) state =
   state {prevTouch = Nothing} <# do
     putStrLn "Touch did end"
-    pure NoOp
+    let (GetArrows x) =
+          swipe (client . fromJust . prevTouch $ state) (client touch) 40
+    print x
+    pure $ swipe (client . fromJust . prevTouch $ state) (client touch) 40
 updateGameState Init state = state <# pure NewGame
 updateGameState _ state = noEff state
