@@ -32,13 +32,13 @@ toDirection arr@Arrows {..} =
     (0, 1) -> U
     _ -> None
 
-threshTrunc :: Int -> Int -> Int -> Int
-threshTrunc x y thresh
-  | abs (x - y) <= thresh = 0
-  | otherwise = x - y
+swipeDir xDiff yDiff
+  | abs xDiff >= abs yDiff = (signum xDiff, 0)
+  | otherwise = (0, signum yDiff)
 
-swipe :: (Int, Int) -> (Int, Int) -> Int -> Action
-swipe (px, py) (x, y) thresh = GetArrows $ Arrows xDir yDir
+swipe :: (Int, Int) -> (Int, Int) -> Action
+swipe (px, py) (x, y) = GetArrows $ Arrows xDir yDir
   where
-    xDir = signum $ threshTrunc x px thresh
-    yDir = signum $ threshTrunc py y thresh
+    xDiff = x - px
+    yDiff = py - y
+    (xDir, yDir) = swipeDir xDiff yDiff
