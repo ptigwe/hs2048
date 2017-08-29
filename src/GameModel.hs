@@ -2,6 +2,7 @@ module GameModel where
 
 import Data.List
 import InputModel
+import Touch
 
 data Tile
   = Number Int
@@ -46,7 +47,7 @@ data GameState = GameState
   , gameProgress :: Progress
   , direction :: Direction
   , randomSeed :: Int
-  , status :: Int
+  , prevTouch :: Maybe Touch
   } deriving (Show, Eq)
 
 gridSize :: Int
@@ -115,5 +116,5 @@ defaultGame =
   , gameProgress = InProgress
   , direction = None
   , randomSeed = 0
-  , status = 0
+  , prevTouch = Nothing
   }

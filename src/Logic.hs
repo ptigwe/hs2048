@@ -157,11 +157,11 @@ updateGameState (GetArrows arr) state = step nState <# pure Sync
   where
     nState = state {direction = toDirection arr}
 updateGameState (TouchStart (TouchEvent touch)) state =
-  state {status = (status state) + 1} <# do
+  state {prevTouch = Just touch} <# do
     putStrLn "Touch did start"
     pure NoOp
 updateGameState (TouchEnd (TouchEvent touch)) state =
-  state {status = (status state) + 1} <# do
+  state {prevTouch = Nothing} <# do
     putStrLn "Touch did end"
     pure NoOp
 updateGameState Init state = state <# pure NewGame
