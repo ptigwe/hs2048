@@ -29,4 +29,5 @@ main = do
     update = updateGameState -- update function
     view = display -- view function
     events = union touchEvents defaultEvents -- default delegated events
+    mountPoint = Nothing -- defaults to body
     subs = [arrowsSub GetArrows] -- empty subscription list
