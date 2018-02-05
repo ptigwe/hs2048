@@ -38,7 +38,7 @@ instance FromJSON TouchEvent where
 touchDecoder :: Decoder TouchEvent
 touchDecoder = Decoder {..}
   where
-    decodeAt = ["changedTouches", "0"]
+    decodeAt = DecodeTarget ["changedTouches", "0"]
     decoder = parseJSON
 
 onTouchMove :: (TouchEvent -> action) -> Attribute action
