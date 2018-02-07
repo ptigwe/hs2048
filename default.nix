@@ -1,8 +1,14 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import ((import <nixpkgs> {}).fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpkgs";
+    rev = "a0aeb23";
+    sha256 = "04dgg0f2839c1kvlhc45hcksmjzr8a22q1bgfnrx71935ilxl33d";
+  }){}
+}:
 let
   result = pkgs.haskell.packages.ghcjs.callCabal2nix "miso" (pkgs.fetchFromGitHub {
-    sha256 = "0l6dscqhniq8my49ycgid3jwxkn7dgv680cjby9qn063kf2k64df";
-    rev = "8475a6bbc0832e730f9556a371f8131a8b421230";
+    rev = "adea51505f30853caae76f38faa5e9f192ae8827";
+    sha256 = "0x8dik2cx5j11svb091pzy2ycvhbb88534fng2v9bic5yx1a8c72";
     owner = "haskell-miso";
     repo = "miso";
   }) {};
